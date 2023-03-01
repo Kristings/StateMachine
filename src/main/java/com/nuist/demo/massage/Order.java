@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Message {
+public class Order {
     int orderId; //发送消息的节点编号
     int  cid; //channel id
     String  field; //字段名
