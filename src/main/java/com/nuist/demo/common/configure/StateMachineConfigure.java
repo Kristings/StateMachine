@@ -7,6 +7,6 @@ package com.nuist.demo.common.configure;
  * @Date: 2023/03/01/11:08
  * @Description:
  */
-public class OrderStateMachineConfigure {
+public class StateMachineConfigure {
 
 }

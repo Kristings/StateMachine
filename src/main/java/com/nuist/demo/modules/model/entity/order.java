@@ -7,5 +7,5 @@ package com.nuist.demo.modules.model.entity;
  * @Date: 2023/03/01/11:09
  * @Description:
  */
-public class order {
+public class Order {
 }
