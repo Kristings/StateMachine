@@ -7,6 +7,6 @@ package com.nuist.demo.modules.model.enums;
  * @Date: 2023/03/01/11:18
  * @Description:
  */
-public class OrderStatusEnum {
+public enum OrderStatusEnum {
 
 }

@@ -4,7 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.*;
 
-public class ThreadPoolConfig {
+public class
+ThreadPoolConfig {
     /**
      * 核心线程数
      */
