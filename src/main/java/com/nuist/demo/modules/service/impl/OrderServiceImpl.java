@@ -7,5 +7,6 @@ package com.nuist.demo.modules.service.impl;
  * @Date: 2023/03/01/11:19
  * @Description:
  */
-public class OrderSerciveImpl {
+public class OrderServiceImpl {
+
 }

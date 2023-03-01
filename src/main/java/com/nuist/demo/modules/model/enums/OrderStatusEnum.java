@@ -8,4 +8,5 @@ package com.nuist.demo.modules.model.enums;
  * @Description:
  */
 public class OrderStatusEnum {
+
 }
