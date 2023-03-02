@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.*;
 
 public class ThreadPoolUtil {
+
     private static ThreadPoolExecutor poolExecutor = ThreadPoolConfig.getInstance();
 
     public static boolean submit(Callable callable) throws ExecutionException, InterruptedException {
@@ -22,7 +23,6 @@ public class ThreadPoolUtil {
     }
 
     public static boolean awaitTerminal(long timer) throws InterruptedException {
-       return poolExecutor.awaitTermination(timer, TimeUnit.SECONDS);
+        return poolExecutor.awaitTermination(timer, TimeUnit.SECONDS);
     }
-
 }

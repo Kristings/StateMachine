@@ -2,6 +2,7 @@ package com.nuist.demo.modules.service;
 
 import com.nuist.demo.massage.Order;
 import com.nuist.demo.massage.RequestMessage;
+import com.nuist.demo.massage.ResponseMessage;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,6 +12,6 @@ import com.nuist.demo.massage.RequestMessage;
  * @Description:
  */
 public interface OrderService {
-   String responseWork(RequestMessage requestMessage ,Order order);
+   ResponseMessage responseWork(RequestMessage requestMessage , Order order);
 
 }

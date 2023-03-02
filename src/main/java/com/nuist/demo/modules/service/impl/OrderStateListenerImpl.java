@@ -23,12 +23,14 @@ import org.springframework.stereotype.Component;
 @Component("orderStateListener")
 @WithStateMachine(name = "orderStateMachine")
 public class OrderStateListenerImpl {
-    @OnTransition(source = "IDLE", target = "RECEIVED_USER_REQUEST")
+    @OnTransition(source = "IDLE", target = "WORKING")
     public boolean readTransition(Message<OrderEvent> message) {
         Order order = (Order) message.getHeaders().get("order");
         assert order != null;
-        order.setOrderState(OrderState.RECEIVED_USER_REQUEST);
+        order.setOrderState(OrderState.WORKING);
         System.out.println("状态切换中：" + message.getHeaders().toString());
         return true;
     }
+
+
 }

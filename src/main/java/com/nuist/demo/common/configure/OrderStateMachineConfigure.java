@@ -55,7 +55,7 @@ public class OrderStateMachineConfigure extends StateMachineConfigurerAdapter<Or
      */
     public void configure(StateMachineTransitionConfigurer<OrderState, OrderEvent> transitions) throws Exception {
         transitions
-                .withExternal().source(OrderState.IDLE).target(OrderState.RECEIVED_USER_REQUEST).event(OrderEvent.RECEIVED_USER_REQUEST);
+                .withExternal().source(OrderState.IDLE).target(OrderState.WORKING).event(OrderEvent.RECEIVED_USER_REQUEST);
 
     }
 
