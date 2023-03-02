@@ -10,11 +10,8 @@ package com.nuist.demo.modules.model.enums;
 public enum OrderState {
 
     IDLE(0, "空闲"),
-    RECEIVED_USER_REQUEST(1, "已收到应用层的请求"),
-    RECEIVED_NODE_REQUEST(2, "已收到其他节点的请求"),
-    RECEIVED_NODE_RESPONSE(3, "已收到其他节点的响应"),
-    DECISION_MADE(4, "已达成共识"),
-    TIME_OUT(5, "交易超时");
+    WAITING(1, "等待中"),
+    WORKING(2, "工作中");
 
     private int code;
     private String msg;

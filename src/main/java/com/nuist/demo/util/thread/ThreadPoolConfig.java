@@ -18,7 +18,7 @@ ThreadPoolConfig {
     /**
      * 多余线程最大空闲时间
      */
-    private static final int keepAlive = 100;
+    private static final int keepAlive = 2000;
     /**
      * 线程池缓冲队列
      *  如果不手动指定容量，默认为Integer.MAX_VALUE，也就是无界队列。

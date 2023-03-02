@@ -8,17 +8,22 @@ package com.nuist.demo.common.configure;
  * @Description:
  */
 
+import com.nuist.demo.massage.Order;
 import com.nuist.demo.modules.model.enums.OrderEvent;
 import com.nuist.demo.modules.model.enums.OrderState;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.statemachine.StateMachineContext;
+import org.springframework.statemachine.StateMachinePersist;
 import org.springframework.statemachine.config.EnableStateMachine;
 import org.springframework.statemachine.config.StateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.StateMachineStateConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineTransitionConfigurer;
 import org.springframework.statemachine.listener.StateMachineListener;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
+import org.springframework.statemachine.persist.DefaultStateMachinePersister;
 import org.springframework.statemachine.state.State;
+import org.springframework.statemachine.support.DefaultStateMachineContext;
 
 import java.util.EnumSet;
 
@@ -62,6 +67,29 @@ public class OrderStateMachineConfigure extends StateMachineConfigurerAdapter<Or
                 System.out.println("State change to " + to.getId());
             }
         };
+    }
+
+    /**
+     * 持久化配置
+     * 实际使用中，可以配合redis等，进行持久化操作
+     *
+     * @return
+     */
+    @Bean
+    public DefaultStateMachinePersister persister() {
+        return new DefaultStateMachinePersister<>(new StateMachinePersist<Object, Object, Order>() {
+            @Override
+            public void write(StateMachineContext<Object, Object> context, Order order) throws Exception {
+                //此处并没有进行持久化操作
+                //此处可调用更新状态流转接口(如：更新时间）状态不需要在此进行调用
+            }
+
+            @Override
+            public StateMachineContext<Object, Object> read(Order order) throws Exception {
+                //此处直接获取order中的状态，其实并没有进行持久化读取操作
+                return new DefaultStateMachineContext(order.getOrderState(), null, null, null);
+            }
+        });
     }
 
 
