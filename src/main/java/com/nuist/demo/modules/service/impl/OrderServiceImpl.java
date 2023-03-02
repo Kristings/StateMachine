@@ -7,6 +7,7 @@ import com.nuist.demo.modules.model.enums.OrderState;
 import com.nuist.demo.modules.service.OrderService;
 import jakarta.annotation.Resource;
 import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.persist.StateMachinePersister;
 
@@ -27,12 +28,16 @@ public class OrderServiceImpl implements OrderService {
     @Resource
     private StateMachinePersister<OrderState, OrderEvent, Order> persister;
 
-    private int id = 1;
-    private Map<Integer, Order> orders = new HashMap<>();
 
     @Override
     public String responseWork(RequestMessage requestMessage) {
-        return null;
+        Order order = new Order();
+        order.setOrderState(OrderState.IDLE);
+        Message message = MessageBuilder.withPayload(OrderEvent.RECEIVED_NODE_REQUEST).setHeader("order",order ).build();
+        if (sendEvent(message,order)){
+            System.out.println("线程名称：" + Thread.currentThread().getName() + "接受到用户请求");
+        }
+        return "OrderEvent.RECEIVED_NODE_REQUEST";
     }
 
 
