@@ -1,10 +1,7 @@
 package com.nuist.demo.util.thread;
 
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.*;
 
 public class ThreadPoolUtil {
     private static ThreadPoolExecutor poolExecutor = ThreadPoolConfig.getInstance();
@@ -23,4 +20,9 @@ public class ThreadPoolUtil {
     public static void shutdown(){
         poolExecutor.shutdown();
     }
+
+    public static boolean awaitTerminal(long timer) throws InterruptedException {
+       return poolExecutor.awaitTermination(timer, TimeUnit.SECONDS);
+    }
+
 }
