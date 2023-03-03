@@ -28,7 +28,7 @@ import org.springframework.statemachine.support.DefaultStateMachineContext;
 import java.util.EnumSet;
 
 /**
- * 订单状态机配置
+ * 状态机配置
  */
 @Configuration
 @EnableStateMachine(name = "orderStateMachine")
@@ -55,7 +55,21 @@ public class OrderStateMachineConfigure extends StateMachineConfigurerAdapter<Or
      */
     public void configure(StateMachineTransitionConfigurer<OrderState, OrderEvent> transitions) throws Exception {
         transitions
-                .withExternal().source(OrderState.IDLE).target(OrderState.WORKING).event(OrderEvent.RECEIVED_USER_REQUEST);
+                .withExternal().source(OrderState.IDLE).target(OrderState.WORKING).event(OrderEvent.RECEIVED_NODE_REQUEST)
+                .and()
+                .withExternal().source(OrderState.IDLE).target(OrderState.WORKING).event(OrderEvent.RECEIVED_USER_REQUEST)
+                .and()
+                .withExternal().source(OrderState.WORKING).target(OrderState.IDLE).event(OrderEvent.SENT_NODE_RESPONSE)
+                .and()
+                .withExternal().source(OrderState.WORKING).target(OrderState.IDLE).event(OrderEvent.DECISION_MADE)
+                .and()
+                .withExternal().source(OrderState.WORKING).target(OrderState.IDLE).event(OrderEvent.TIME_OUT)
+                .and()
+                .withExternal().source(OrderState.WORKING).target(OrderState.WAITING).event(OrderEvent.SENT_NODE_REQUEST)
+                .and()
+                .withExternal().source(OrderState.WAITING).target(OrderState.WORKING).event(OrderEvent.RECEIVED_NODE_RESPONSE)
+                .and()
+                .withExternal().source(OrderState.WAITING).target(OrderState.IDLE).event(OrderEvent.TIME_OUT);
 
     }
 
@@ -64,7 +78,7 @@ public class OrderStateMachineConfigure extends StateMachineConfigurerAdapter<Or
         return new StateMachineListenerAdapter<OrderState, OrderEvent>() {
             @Override
             public void stateChanged(State<OrderState, OrderEvent> from, State<OrderState, OrderEvent> to) {
-                System.out.println("State change to " + to.getId());
+                System.out.println("State change--"+from+"---"  + to);
             }
         };
     }
@@ -86,6 +100,7 @@ public class OrderStateMachineConfigure extends StateMachineConfigurerAdapter<Or
 
             @Override
             public StateMachineContext<Object, Object> read(Order order) throws Exception {
+
                 //此处直接获取order中的状态，其实并没有进行持久化读取操作
                 return new DefaultStateMachineContext(order.getOrderState(), null, null, null);
             }

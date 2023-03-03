@@ -7,16 +7,12 @@ import com.nuist.demo.modules.model.enums.OrderEvent;
 import com.nuist.demo.modules.model.enums.OrderState;
 import com.nuist.demo.modules.service.OrderService;
 import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
+import org.springframework.statemachine.listener.StateMachineListener;
 import org.springframework.statemachine.persist.StateMachinePersister;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,50 +29,64 @@ public class OrderServiceImpl implements OrderService {
     @Resource
     private StateMachinePersister<OrderState, OrderEvent, Order> persister;
 
+    @Resource
+    private StateMachineListener<OrderState, OrderEvent> listener;
 
+    /**
+     * 事件也记录起来
+     * @param requestMessage
+     * @param order
+     * @return
+     */
+    /*********************************************转状态IDLE -> WORKING*********************************************************/
     @Override
     public ResponseMessage responseWork(RequestMessage requestMessage , Order order) {
         System.out.println("------------------------------状态转换----------------------------------------");
-        order.setOrderState(OrderState.IDLE);
-        Message message = MessageBuilder.withPayload(OrderEvent.RECEIVED_USER_REQUEST).setHeader("order",order ).build();
+        Message message = MessageBuilder.withPayload(OrderEvent.RECEIVED_USER_REQUEST)
+                .setHeader("order",order )
+                .setHeader("requestMessage",requestMessage)
+                .setHeader("event","RECEIVED_USER_REQUEST").build();
+//        System.out.println("线程名称：" + Thread.currentThread().getName() + "---接受到用户请求---"+requestMessage.oper);
         if (sendEvent(message,order)){
+            System.out.println("****************************work请求成功*****************************");
+             message = MessageBuilder.withPayload(OrderEvent.SENT_NODE_REQUEST)
+                    .setHeader("order",order )
+                    .setHeader("requestMessage",requestMessage)
+                    .setHeader("event","RECEIVED_NODE_REQUEST").build();
+             if (sendEvent(message,order)){
+                 System.out.println("***********************收到srv6回复信息********************");
+                 message = MessageBuilder.withPayload(OrderEvent.RECEIVED_NODE_RESPONSE)
+                         .setHeader("order",order )
+                         .setHeader("requestMessage",requestMessage)
+                         .setHeader("event","RECEIVED_NODE_RESPONSE").build();
+                 if (sendEvent(message,order)){
+                     System.out.println("状态转换为IDLE，关闭状态机");
+                 }
+             }
+        }
+        //
+        return new ResponseMessage();
+    }
 
-            if (requestMessage.oper == 0){//读
-                readWork(requestMessage);
-
-            } else if (requestMessage.oper == 1) {//写
-                writeWork(requestMessage);
-            }else {//出错
-                System.out.println("出错了");
-            }
-
-            System.out.println("线程名称：" + Thread.currentThread().getName() + "---接受到用户请求---"+requestMessage.oper);
+    /**
+     *
+     * @param order
+     * @return
+     */
+    @Override
+    public ResponseMessage responseOrder(Order order) {
+        System.out.println("------------------------------状态转换----------------------------------------");
+        Message message = MessageBuilder.withPayload(OrderEvent.RECEIVED_NODE_REQUEST)
+                .setHeader("order",order )
+                .setHeader("event","RECEIVED_NODE_REQUEST").build();
+        if (sendEvent(message,order)){
+            System.out.println("线程名称：" + Thread.currentThread().getName() + "---接受到节点请求---");
             System.out.println(order);
         }
         return new ResponseMessage();
     }
 
 
-
-
-    /**
-     * 执行读写请求事件
-     *
-     * @param readRequest
-     * @return responseMassage
-     */
-     public void readWork(RequestMessage readRequest){
-
-     }
-    /**
-     * 执行读写请求事件
-     *
-     * @param writeRequest
-     * @return responseMassage
-     */
-     public void writeWork(RequestMessage writeRequest){
-
-     }
 
 
     /**

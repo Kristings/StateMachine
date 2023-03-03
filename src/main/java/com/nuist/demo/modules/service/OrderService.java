@@ -13,5 +13,7 @@ import com.nuist.demo.massage.ResponseMessage;
  */
 public interface OrderService {
    ResponseMessage responseWork(RequestMessage requestMessage , Order order);
+   ResponseMessage responseOrder(Order order);
+
 
 }

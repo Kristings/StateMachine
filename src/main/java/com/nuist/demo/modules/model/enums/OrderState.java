@@ -11,8 +11,7 @@ public enum OrderState {
 
     IDLE(0, "空闲"),
     WAITING(1, "等待中"),
-    WORKING(2, "工作中"),
-    FINISH(3, "完成");
+    WORKING(2, "工作中");
     private int code;
     private String msg;
 

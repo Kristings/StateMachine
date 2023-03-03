@@ -27,11 +27,9 @@ OrderServiceImpl orderService;
         TaskMachine taskMachine = new TaskMachine(orderService, new RequestMessage(), order);
         ThreadPoolUtil.submit(taskMachine);
 
-        if (!ThreadPoolUtil.awaitTerminal(1)){ //超时
-            System.out.println("等一等，超时ing");
-        }
+        ThreadPoolUtil.awaitTerminal(1);
         ThreadPoolUtil.shutdown();
-        System.out.println("***************结束了****************");
+        System.out.println("***************主线程结束了****************");
 
     }
 
